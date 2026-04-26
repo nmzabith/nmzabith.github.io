@@ -66,54 +66,10 @@ function animate() {
     requestAnimationFrame(animate);
 }
 
-// Enhanced Commit Graph with Tooltips
-function generateCommits() {
-    const container = document.getElementById('commit-container');
-    const tooltip = document.getElementById('tooltip');
-    const count = 365 * 2;
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    
-    for (let i = 0; i < count; i++) {
-        const day = document.createElement('div');
-        day.className = 'commit-day';
-        
-        const rand = Math.random();
-        let commits = 0;
-        if (rand > 0.95) { day.classList.add('lvl-4'); commits = Math.floor(Math.random() * 10) + 10; }
-        else if (rand > 0.85) { day.classList.add('lvl-3'); commits = Math.floor(Math.random() * 5) + 5; }
-        else if (rand > 0.7) { day.classList.add('lvl-2'); commits = Math.floor(Math.random() * 3) + 2; }
-        else if (rand > 0.5) { day.classList.add('lvl-1'); commits = 1; }
-        
-        day.addEventListener('mouseover', (e) => {
-            const date = new Date();
-            date.setDate(date.getDate() - (count - i));
-            tooltip.innerText = `${commits} commits on ${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
-            tooltip.style.opacity = 1;
-            tooltip.style.left = `${e.pageX - container.getBoundingClientRect().left}px`;
-            tooltip.style.top = `${e.pageY - container.getBoundingClientRect().top - 40}px`;
-        });
-        
-        day.addEventListener('mouseout', () => {
-            tooltip.style.opacity = 0;
-        });
-        
-        container.appendChild(day);
-    }
-}
-
-const observerOptions = { threshold: 0.1 };
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-        }
-    });
-}, observerOptions);
-
 document.addEventListener('DOMContentLoaded', () => {
     init();
     animate();
-    generateCommits();
+    
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 });
 
